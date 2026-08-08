@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import streamlit as st
+import os
 
 from pypdf import PdfReader
 
@@ -67,9 +68,8 @@ if "messages" not in st.session_state:
 # ============================================================
 
 try:
-
-    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
-    TAVILY_API_KEY = st.secrets["TAVILY_API_KEY"]
+    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+    TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
 except Exception:
 
