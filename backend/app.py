@@ -67,27 +67,27 @@ if "messages" not in st.session_state:
 # API KEYS
 # ============================================================
 
-try:
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 
-except Exception:
+if not GEMINI_API_KEY:
+    try:
+        GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+    except Exception:
+        pass
 
-    st.error(
-        """
-        API keys are missing.
+if not TAVILY_API_KEY:
+    try:
+        TAVILY_API_KEY = st.secrets["TAVILY_API_KEY"]
+    except Exception:
+        pass
 
-        Create:
+if not GEMINI_API_KEY:
+    st.error("GEMINI_API_KEY is missing.")
+    st.stop()
 
-        .streamlit/secrets.toml
-
-        with:
-
-        GEMINI_API_KEY = "your-gemini-api-key"
-        TAVILY_API_KEY = "your-tavily-api-key"
-        """
-    )
-
+if not TAVILY_API_KEY:
+    st.error("TAVILY_API_KEY is missing.")
     st.stop()
 
 
@@ -114,7 +114,7 @@ embeddings = get_embeddings()
 def get_model():
 
     return init_chat_model(
-        "google_genai:gemini-3.5-flash",
+        "google_genai:gemini-3.1-flash-lite",
         api_key=GEMINI_API_KEY,
         temperature=0
     )
